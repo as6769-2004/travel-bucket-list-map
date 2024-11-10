@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
   title: 'Travel Bucket List - Travel Booking Platform',
-  description: 'Book amazing travel packages and explore destinations worldwide',
+  description: 'Book your amazing travel packages and explore destinations worldwide',
 }
 
 export default function RootLayout({ children }) {
