@@ -9,6 +9,7 @@ const testRoutes = async () => {
     { name: 'Analytics', url: '/api/analytics' }
   ];
 
+  
   console.log('🧪 Testing API Routes...\n');
 
   for (const route of routes) {
