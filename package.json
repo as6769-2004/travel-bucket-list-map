@@ -1,0 +1,11 @@
+{
+  "name": "travel-bucket-list-map",
+  "version": "1.0.0",
+  "description": "A travel bucket list map application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
