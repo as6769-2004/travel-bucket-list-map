@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Projects</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+
+<body onload="showSlides()">
+  <header>
+    <h1>Projects</h1>
+  </header>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="projects.html">Projects</a>
+    <a href="contact.html">Contact</a>
+    <a href="gallery.html">Gallery</a>
+  </nav>
+  <div class="container">
+    <h2>To-Do List</h2>
+    <div class="todo">
+      <input type="text" id="taskInput" placeholder="Enter a task">
+      <button onclick="addTask()">Add</button>
+      <ul id="taskList"></ul>
+    </div>
+
+    <h2>Image Slider</h2>
+    <div class="slider">
+
+      <img src="../assets/gallery/place_2.jpg" class='active'>
+      <img src="../assets/gallery/place_3.jpg">
+      <img src="../assets/gallery/place_4.jpg">
+      <img src="../assets/gallery/place_5.jpg">
+    </div>
+  </div>
+</body>
+
+</html>

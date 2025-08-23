@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Projects</title>
+  <style>
+    body { font-family: Arial; margin: 40px; }
+    nav a { margin: 0 15px; text-decoration: none; font-weight: bold; }
+    #list li { margin: 5px 0; }
+    #slider { display: block; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">Home</a> |
+    <a href="about.html">About</a> |
+    <a href="projects.html">Projects</a>
+  </nav>
+  <hr>
+
+  <h1>My Projects</h1>
+
+  <!-- To-Do List -->
+  <h2>To-Do List</h2>
+  <input type="text" id="task" placeholder="Enter a task">
+  <button onclick="addTask()">Add</button>
+  <ul id="list"></ul>
+
+  <!-- Image Slider -->
+  <h2>Image Slider</h2>
+  <img id="slider" src="img1.jpg" width="300">
+
+  <script>
+    // To-Do List
+    function addTask() {
+      let task = document.getElementById("task").value;
+      if(task.trim() !== ""){
+        let li = document.createElement("li");
+        li.innerHTML = task + " <button onclick='this.parentElement.remove()'>❌</button>";
+        document.getElementById("list").appendChild(li);
+        document.getElementById("task").value = "";
+      }
+    }
+
+    // Image Slider
+    let images = ["img1.jpg", "img2.jpg", "img3.jpg"];
+    let i = 0;
+    setInterval(() => {
+      i = (i + 1) % images.length;
+      document.getElementById("slider").src = images[i];
+    }, 2000);
+  </script>
+</body>
+</html>
