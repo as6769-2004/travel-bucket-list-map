@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Travel Buckets</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <style>
+
+    .gallery-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 10px;
+    }
+    .gallery-card {
+      width: 200px;
+      height: 150px;
+      overflow: hidden;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    .gallery-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Top Bar -->
+  <header class="app-header">
+    <button id="sidebar-toggle" class="sidebar-toggle-btn" title="Toggle Sidebar">
+      <svg class="icon-menu" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+    <h1 class="app-title">🌍 Travel Buckets</h1>
+  </header>
+
+  <!-- Body -->
+  <div class="app-body">
+    <!-- Left Sidebar -->
+    <aside class="sidebar">
+      <nav>
+        <a href="dashboard.html" class="active"><span>📊</span> <span class="link-text">Dashboard</span></a>
+        <a href="visited.html"><span>✔️</span> <span class="link-text">Visited</span></a>
+        <a href="gallery.html"><span>🖼️</span> <span class="link-text">Gallery</span></a>
+        <a href="new-spot.html"><span>➕</span> <span class="link-text">New Spot</span></a>
+        <a href="profile.html"><span>👤</span> <span class="link-text">Profile</span></a>
+        <a href="settings.html"><span>⚙️</span> <span class="link-text">Settings</span></a>
+      </nav>
+    </aside>
+
+    <!-- Right Main Content -->
+    <main id="main-content" class="dashboard">
+      <h2>Loading...</h2>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const mainContent = document.getElementById('main-content');
+      let appData = null;
+      let activeTimers = [];
+
+      // --- Sidebar Toggle ---
+      const toggleBtn = document.getElementById('sidebar-toggle');
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          document.body.classList.toggle('sidebar-collapsed');
+        });
+      }
+
+      // --- Card HTML ---
+      function createCardHtml(place) {
+        return `
+          <div class="card">
+            ${place.img
+              ? `<img src="${place.img}" alt="${place.name}">`
+              : `<div class="no-preview">No preview available</div>`}
+            <div class="info">
+              <h3>${place.name}</h3>
+              <p class="location">${place.location || ""}</p>
+              ${place.visitedDate
+                ? `<p class="date">Visited: ${place.visitedDate}</p>`
+                : place.tripDate
+                  ? `<p class="date">Trip: ${place.tripDate}</p>`
+                  : ""}
+              <p class="desc">${place.description || ""}</p>
+            </div>
+          </div>`;
+      }
+
+      // --- Dashboard View ---
+      function renderDashboardView() {
+        if (!appData) return '<h2>Loading...</h2>';
+        const { recommendations = [], upcomingTrips = [], visitedPlaces = [] } = appData;
+        return `
+          <div class="topbar">
+            <div class="title">
+              <h1>✈️ Travel Buckets</h1>
+              <p>Welcome back, <strong>Aditya</strong> 👋</p>
+            </div>
+            <div class="stats">
+              <div class="stat-card"><h3>${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</h3><p>Today</p></div>
+              <div class="stat-card"><h3>${visitedPlaces.length}</h3><p>Places Visited</p></div>
+              <div class="stat-card"><h3>${upcomingTrips.length}</h3><p>Upcoming Trips</p></div>
+            </div>
+          </div>
+          <section class="recommendations">
+            <h2>✨ Seasonal Picks for You</h2>
+            <div class="scroll-container" id="recommendation-list">
+              ${recommendations.map(createCardHtml).join('')}
+            </div>
+          </section>
+          <section class="upcoming">
+            <h2>📅 Upcoming Trips</h2>
+            <div class="scroll-container" id="trip-list">
+              ${upcomingTrips.map(createCardHtml).join('')}
+            </div>
+            <button class="plan-btn">➕ Plan a New Trip</button>
+          </section>
+          <section class="visited">
+            <h2>✅ Visited Highlights</h2>
+            <div class="scroll-container" id="visited-list">
+              ${visitedPlaces.map(createCardHtml).join('')}
+            </div>
+          </section>
+        `;
+      }
+
+      // --- Views ---
+      const views = {
+        'dashboard.html': { render: renderDashboardView, title: 'Dashboard' },
+        'visited.html': {
+          render: () => {
+            if (!appData) return '<h2>Loading...</h2>';
+            return `
+              <div class="page-header">
+                <h1>✔️ Visited Places</h1>
+                <p>A collection of all the wonderful places you've been.</p>
+              </div>
+              <div class="grid-container">
+                ${appData.visitedPlaces.map(createCardHtml).join('')}
+              </div>`;
+          }, title: 'Visited'
+        },
+        'gallery.html': {
+          render: () => {
+            return `
+              <div class="page-header">
+                <h1>🖼️ Travel Gallery</h1>
+                <p>A collection of memories and inspirations from your journeys.</p>
+              </div>
+              <div id="gallery" class="grid-container gallery-grid">
+                <p>Loading gallery...</p>
+              </div>`;
+          },
+          title: 'Gallery',
+          onRender: () => {
+            const gallery = document.getElementById('gallery');
+
+            // **List all gallery images here manually**
+            const images = [
+              "assets/gallery/place_1.jpg",
+              "assets/gallery/place_2.jpg",
+              "assets/gallery/place_3.jpg",
+              "assets/gallery/place_4.jpg",
+              "assets/gallery/place_5.jpg"
+            ];
+
+            gallery.innerHTML = images.map(img => `
+              <div class="card gallery-card">
+                <img src="${img}" alt="Travel Spot">
+              </div>`).join('');
+          }
+        },
+        'new-spot.html': { render: () => `<h2>➕ New Spot (form here)</h2>`, title: 'New Spot' },
+        'profile.html': { render: () => `<h2>👤 Profile (coming soon)</h2>`, title: 'Profile' },
+        'settings.html': { render: () => `<h2>⚙️ Settings (coming soon)</h2>`, title: 'Settings' }
+      };
+
+      function loadView(viewKey) {
+        activeTimers.forEach(stop => stop());
+        activeTimers = [];
+        const view = views[viewKey] || views['dashboard.html'];
+        mainContent.innerHTML = view.render();
+        document.title = `Travel Buckets - ${view.title}`;
+        if (view.onRender) setTimeout(view.onRender, 50);
+        document.querySelectorAll('.sidebar nav a').forEach(a => {
+          a.classList.toggle('active', a.getAttribute('href') === viewKey);
+        });
+      }
+
+      // --- Sidebar Clicks ---
+      document.querySelector('.sidebar nav').addEventListener('click', (e) => {
+        const link = e.target.closest('a');
+        if (link) {
+          e.preventDefault();
+          loadView(link.getAttribute('href'));
+        }
+      });
+
+      // --- Load travel data ---
+      fetch('data/data.json')
+        .then(res => res.ok ? res.json() : Promise.reject('Failed to load data.json'))
+        .then(data => {
+          appData = data;
+          loadView('dashboard.html');
+        })
+        .catch(err => {
+          console.error(err);
+          mainContent.innerHTML = `<div class="page-header"><h1>Error</h1><p>Could not load travel data.</p></div>`;
+        });
+    });
+  </script>
+</body>
+</html>
