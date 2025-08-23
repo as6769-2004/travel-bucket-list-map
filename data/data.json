@@ -1,0 +1,153 @@
+{
+  "recommendations": [
+    {
+      "name": "Goa Beaches",
+      "img": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600",
+      "location": "Goa, India",
+      "description": "Pristine beaches and vibrant nightlife.",
+      "tags": ["beach", "party"]
+    },
+    {
+      "name": "Himalayan Trek",
+      "img": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=600",
+      "location": "Himalayas, India/Nepal",
+      "description": "Breathtaking views and challenging trails.",
+      "tags": ["trekking", "adventure", "nature"]
+    },
+    {
+      "name": "Kerala Backwaters",
+      "img": "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=600",
+      "location": "Kerala, India",
+      "description": "Serene network of lagoons, lakes, and canals.",
+      "tags": ["relaxing", "nature", "houseboat"]
+    },
+    {
+      "name": "Jaipur Forts",
+      "img": "https://images.unsplash.com/photo-1578916171728-46686eac8d58?w=600",
+      "location": "Jaipur, India",
+      "description": "Explore the majestic forts of the Pink City.",
+      "tags": ["history", "royal", "architecture"]
+    },
+    {
+      "name": "Swiss Alps",
+      "img": "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=600",
+      "location": "Switzerland",
+      "description": "Iconic mountains offering skiing and hiking.",
+      "tags": ["mountains", "skiing", "scenic"]
+    },
+    {
+      "name": "Santorini",
+      "img": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600",
+      "location": "Greece",
+      "description": "Stunning sunsets and white-washed villages.",
+      "tags": ["romance", "island", "scenic"]
+    },
+    {
+      "name": "Dubai Skyline",
+      "img": "https://images.unsplash.com/photo-1504274066651-8d31a536b11a?w=600",
+      "location": "Dubai, UAE",
+      "description": "A futuristic cityscape rising from the desert.",
+      "tags": ["modern", "luxury", "city"]
+    }
+  ],
+  "upcomingTrips": [
+    {
+      "name": "Paris Adventure",
+      "img": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600",
+      "location": "Paris, France",
+      "tripDate": "2024-09-15",
+      "description": "The city of love, art, and fashion awaits.",
+      "tags": ["romance", "art", "city break"]
+    },
+    {
+      "name": "Bali Getaway",
+      "img": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600",
+      "location": "Bali, Indonesia",
+      "tripDate": "2024-11-20",
+      "description": "Spiritual retreats and volcanic landscapes.",
+      "tags": ["spiritual", "beach", "nature"]
+    },
+    {
+      "name": "London Calling",
+      "img": "https://images.unsplash.com/photo-1473959383416-c6bdcfa0f87b?w=600",
+      "location": "London, UK",
+      "tripDate": "2025-01-05",
+      "description": "A trip to see historic landmarks and modern marvels.",
+      "tags": ["history", "city", "culture"]
+    },
+    {
+      "name": "Sydney Vibes",
+      "img": "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d6?w=600",
+      "location": "Sydney, Australia",
+      "tripDate": "2025-04-10",
+      "description": "Iconic opera house and beautiful harbour.",
+      "tags": ["beach", "city", "iconic"]
+    },
+    {
+      "name": "Tokyo Lights",
+      "img": "https://images.unsplash.com/photo-1555992336-cbf0b9e8f7a9?w=600",
+      "location": "Tokyo, Japan",
+      "tripDate": "2025-07-22",
+      "description": "A blend of ultramodern and traditional.",
+      "tags": ["culture", "food", "modern"]
+    }
+  ],
+  "visitedPlaces": [
+    {
+      "name": "Taj Mahal",
+      "img": "https://images.unsplash.com/photo-1589541834793-8a8b3e4b9f45?w=600",
+      "location": "Agra, India",
+      "visitedDate": "2022-03-10",
+      "description": "An ivory-white marble mausoleum.",
+      "tags": ["history", "architecture", "unesco"]
+    },
+    {
+      "name": "New York",
+      "img": "https://images.unsplash.com/photo-1528909514045-2fa4ac7a08ba?w=600",
+      "location": "New York, USA",
+      "visitedDate": "2021-09-01",
+      "description": "The city that never sleeps.",
+      "tags": ["city", "iconic", "urban"]
+    },
+    {
+      "name": "Tokyo",
+      "img": "https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=600",
+      "location": "Tokyo, Japan",
+      "visitedDate": "2019-05-20",
+      "description": "A vibrant mix of ancient and new.",
+      "tags": ["city", "food", "modern"]
+    },
+    {
+      "name": "Kerala",
+      "img": "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=600",
+      "location": "Kerala, India",
+      "visitedDate": "2023-01-15",
+      "description": "God's Own Country, with lush greenery.",
+      "tags": ["nature", "relaxing", "backwaters"]
+    },
+    {
+      "name": "Manali",
+      "img": "https://images.unsplash.com/photo-1618828666401-8b6e3c8b7d7a?w=600",
+      "location": "Himachal Pradesh, India",
+      "visitedDate": "2022-06-05",
+      "description": "A high-altitude Himalayan resort town.",
+      "tags": ["mountains", "adventure", "snow"]
+    },
+    {
+      "name": "London",
+      "img": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600",
+      "location": "London, UK",
+      "visitedDate": "2018-11-12",
+      "description": "Rich history and iconic landmarks.",
+      "tags": ["history", "city", "culture"]
+    },
+    {
+      "name": "Singapore",
+      "img": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600",
+      "location": "Singapore",
+      "visitedDate": "2019-02-28",
+      "description": "A futuristic city-state and garden city.",
+      "tags": ["modern", "clean", "city"]
+    }
+  ]
+}
