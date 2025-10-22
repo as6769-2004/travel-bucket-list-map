@@ -42,6 +42,8 @@ import {
   Users,
   Package,
 } from "lucide-react";
+import InteractiveMap from "@/components/map/InteractiveMap";
+import DestinationImage from "@/components/ui/destination-image";
 
 export default function App() {
   const [packages, setPackages] = useState([]);
@@ -50,7 +52,9 @@ export default function App() {
   const [analytics, setAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeTab, setActiveTab] = useState("packages");
+  const [mounted, setMounted] = useState(false);
 
   // Booking form state
   const [bookingForm, setBookingForm] = useState({
@@ -67,10 +71,24 @@ export default function App() {
   });
 
   const [selectedPackage, setSelectedPackage] = useState(null);
+  const [mapSelectedPackage, setMapSelectedPackage] = useState(null);
   const [bookingDialogOpen, setBookingDialogOpen] = useState(false);
   const [bookingStep, setBookingStep] = useState(1);
 
   useEffect(() => {
+    setMounted(true);
+    // Check if user is logged in
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      try {
+        const user = JSON.parse(savedUser);
+        setCurrentUser(user);
+        setIsLoggedIn(true);
+      } catch (error) {
+        console.error("Error parsing saved user:", error);
+        localStorage.removeItem("user");
+      }
+    }
     fetchPackages();
     fetchHotels();
     fetchAnalytics();
@@ -78,20 +96,131 @@ export default function App() {
 
   useEffect(() => {
     if (currentUser) {
-      fetchUserBookings(currentUser.UserID);
+      fetchUserBookings(currentUser.id || currentUser.UserID);
     }
   }, [currentUser]);
 
   const fetchPackages = async () => {
     try {
       const response = await fetch("/api/packages");
-      const data = await response.json();
-      if (data.success) {
-        setPackages(data.data);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-      setLoading(false);
+      const data = await response.json();
+      setPackages(
+        data.packages ||
+          data.data || [
+            {
+              id: 1,
+              destination_id: 1,
+              name: "🏖️ Goa Beach Paradise",
+              description:
+                "Golden beaches, vibrant nightlife, Portuguese heritage. Beach parties, water sports, sunset cruises.",
+              price: 15000,
+              duration: 5,
+              rating: 4.5,
+              destinations: [{ id: 1, name: "Goa", country: "India" }],
+              image:
+                "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=400",
+            },
+            {
+              id: 2,
+              destination_id: 2,
+              name: "🏰 Rajasthan Royal Heritage",
+              description:
+                "Majestic palaces, desert safaris, royal culture. Camel rides, folk dances, luxury stays.",
+              price: 25000,
+              duration: 7,
+              rating: 4.8,
+              destinations: [{ id: 2, name: "Jaipur", country: "India" }],
+              image:
+                "https://images.unsplash.com/photo-1599661046827-dacde6976549?w=400",
+            },
+            {
+              id: 3,
+              destination_id: 3,
+              name: "🌴 Kerala Backwaters",
+              description:
+                "Serene backwaters, spice plantations, Ayurveda. Houseboat stays, traditional cuisine, wellness.",
+              price: 18000,
+              duration: 5,
+              rating: 4.6,
+              destinations: [{ id: 3, name: "Kerala", country: "India" }],
+              image:
+                "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=400",
+            },
+            {
+              id: 4,
+              destination_id: 4,
+              name: "🕌 Spiritual Varanasi",
+              description:
+                "Ancient rituals and spiritual essence of India's oldest living city.",
+              price: 12000,
+              duration: 3,
+              rating: 4.9,
+              destinations: [{ id: 4, name: "Varanasi", country: "India" }],
+              image:
+                "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=400",
+            },
+            {
+              id: 5,
+              destination_id: 5,
+              name: "🕌 Agra Taj Mahal Wonder",
+              description:
+                "Iconic Taj Mahal, Mughal architecture, history. Monument tours, local crafts, cultural shows.",
+              price: 12000,
+              duration: 3,
+              rating: 4.9,
+              destinations: [{ id: 5, name: "Agra", country: "India" }],
+              image:
+                "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=400",
+            },
+            {
+              id: 6,
+              destination_id: 10,
+              name: "🏙️ Dubai Luxury Experience",
+              description:
+                "Futuristic skyline, luxury shopping, desert adventures. Burj Khalifa, gold souks, safari tours.",
+              price: 45000,
+              duration: 4,
+              rating: 4.8,
+              destinations: [{ id: 10, name: "Dubai", country: "UAE" }],
+              image:
+                "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=400",
+            },
+          ]
+      );
     } catch (error) {
       console.error("Error fetching packages:", error);
+      setPackages([
+        {
+          id: 1,
+          destination_id: 1,
+          name: "🏖️ Goa Beach Paradise",
+          description:
+            "Golden beaches, vibrant nightlife, Portuguese heritage. Beach parties, water sports, sunset cruises.",
+          price: 15000,
+          duration: 5,
+          rating: 4.5,
+          destinations: [{ id: 1, name: "Goa", country: "India" }],
+          image:
+            "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=400",
+        },
+        {
+          id: 2,
+          destination_id: 2,
+          name: "🏰 Rajasthan Royal Heritage",
+          description:
+            "Majestic palaces, desert safaris, royal culture. Camel rides, folk dances, luxury stays.",
+          price: 25000,
+          duration: 7,
+          rating: 4.8,
+          destinations: [{ id: 2, name: "Jaipur", country: "India" }],
+          image:
+            "https://images.unsplash.com/photo-1599661046827-dacde6976549?w=400",
+        },
+      ]);
+    } finally {
       setLoading(false);
     }
   };
@@ -99,43 +228,112 @@ export default function App() {
   const fetchHotels = async () => {
     try {
       const response = await fetch("/api/hotels");
-      const data = await response.json();
-      if (data.success) {
-        setHotels(data.data);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+      const data = await response.json();
+      setHotels(
+        data.success
+          ? (data.hotels || data.data)
+          : [
+              {
+                id: 1,
+                name: "Beach Resort Goa",
+                address: "Calangute Beach, Goa",
+                star_rating: 5,
+              },
+              {
+                id: 2,
+                name: "Palace Hotel Jaipur",
+                address: "City Palace Road, Jaipur",
+                star_rating: 4,
+              },
+            ]
+      );
     } catch (error) {
       console.error("Error fetching hotels:", error);
+      setHotels([
+        {
+          id: 1,
+          name: "Beach Resort Goa",
+          address: "Calangute Beach, Goa",
+          star_rating: 5,
+        },
+        {
+          id: 2,
+          name: "Palace Hotel Jaipur",
+          address: "City Palace Road, Jaipur",
+          star_rating: 4,
+        },
+      ]);
     }
   };
 
   const fetchUserBookings = async (userId) => {
     try {
-      const response = await fetch(`/api/bookings/user/${userId}`);
-      const data = await response.json();
-      if (data.success) {
-        setBookings(data.data);
+      const response = await fetch(`/api/bookings/user?userId=${userId}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+      const data = await response.json();
+      setBookings(data.success ? data.bookings : []);
     } catch (error) {
       console.error("Error fetching bookings:", error);
+      setBookings([]);
     }
   };
 
   const fetchAnalytics = async () => {
     try {
       const response = await fetch("/api/admin/analytics");
-      const data = await response.json();
-      if (data.success) {
-        setAnalytics(data.data);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+      const data = await response.json();
+      setAnalytics(data.success ? data.data : null);
     } catch (error) {
       console.error("Error fetching analytics:", error);
+      setAnalytics(null);
     }
   };
 
-  const handleBookingStart = (pkg) => {
+  const handleBookingStart = async (pkg) => {
+    if (!isLoggedIn) {
+      alert("Please login to book a package");
+      window.location.href = "/login";
+      return;
+    }
     setSelectedPackage(pkg);
-    setBookingForm({ ...bookingForm, packageId: pkg.PackageID });
-    setBookingStep(1);
+    setBookingForm({ ...bookingForm, packageId: pkg.id });
+    
+    // Clear previous hotels
+    setHotels([]);
+    
+    // Fetch destination-specific hotels
+    const destinationId = pkg.destination_id || pkg.destinations?.[0]?.id;
+    console.log('Package:', pkg.name, 'Destination ID:', destinationId);
+    
+    if (destinationId) {
+      try {
+        const hotelsRes = await fetch(`/api/hotels?destination_id=${destinationId}`);
+        const hotelsData = await hotelsRes.json();
+        
+        console.log('Hotels API response:', hotelsData);
+        
+        if (hotelsData.success && hotelsData.hotels) {
+          setHotels(hotelsData.hotels);
+          console.log('Hotels set:', hotelsData.hotels);
+        } else {
+          console.log('No hotels found for destination:', destinationId);
+          setHotels([]);
+        }
+      } catch (error) {
+        console.error('Error fetching destination data:', error);
+        setHotels([]);
+      }
+    }
+    
+    setBookingStep(isLoggedIn ? 2 : 1);
     setBookingDialogOpen(true);
   };
 
@@ -157,9 +355,11 @@ export default function App() {
       const data = await response.json();
       if (data.success) {
         setCurrentUser({
-          UserID: data.data.UserID,
+          id: data.data.id,
+          UserID: data.data.id,
+          name: bookingForm.name,
           Name: bookingForm.name,
-          Email: bookingForm.email,
+          email: bookingForm.email,
         });
         setBookingStep(2);
       }
@@ -175,16 +375,21 @@ export default function App() {
       return;
     }
 
+    if (!currentUser || !currentUser.UserID) {
+      alert("Please login to complete booking");
+      return;
+    }
+
     try {
       // Create booking
       const bookingResponse = await fetch("/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userId: currentUser.UserID,
+          userId: currentUser.id || currentUser.UserID,
           packageId: bookingForm.packageId,
           hotelId: bookingForm.hotelId,
-          totalAmount: selectedPackage.Price,
+          totalAmount: parseFloat(selectedPackage.price),
         }),
       });
       const bookingData = await bookingResponse.json();
@@ -195,9 +400,9 @@ export default function App() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            bookingId: bookingData.data.BookingID,
+            bookingId: bookingData.data.id || bookingData.data.BookingID,
             mode: bookingForm.paymentMode,
-            amount: selectedPackage.Price,
+            amount: parseFloat(selectedPackage.price),
           }),
         });
         const paymentData = await paymentResponse.json();
@@ -205,7 +410,7 @@ export default function App() {
         if (paymentData.success) {
           alert("Booking confirmed successfully!");
           setBookingDialogOpen(false);
-          fetchUserBookings(currentUser.UserID);
+          fetchUserBookings(currentUser.id || currentUser.UserID);
           setActiveTab("bookings");
           // Reset form
           setBookingForm({
@@ -237,7 +442,7 @@ export default function App() {
     });
   };
 
-  if (loading) {
+  if (!mounted || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50">
         <div className="text-center">
@@ -260,7 +465,7 @@ export default function App() {
               </div>
               <div>
                 <h1 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  Travel Bucket List
+                  Travel Bucket List Map
                 </h1>
 
                 <p className="text-xs text-gray-500">
@@ -268,14 +473,50 @@ export default function App() {
                 </p>
               </div>
             </div>
-            {currentUser && (
-              <div className="flex items-center space-x-2 bg-blue-50 px-4 py-2 rounded-lg">
-                <Users className="h-4 w-4 text-blue-600" />
-                <span className="text-sm font-medium text-gray-700">
-                  {currentUser.Name}
-                </span>
-              </div>
-            )}
+            <div className="flex items-center space-x-3">
+              {isLoggedIn && currentUser ? (
+                <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-2 bg-blue-50 px-4 py-2 rounded-lg">
+                    <Users className="h-4 w-4 text-blue-600" />
+                    <span className="text-sm font-medium text-gray-700">
+                      {currentUser.name ||
+                        currentUser.Name ||
+                        currentUser.email}
+                    </span>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      localStorage.removeItem("user");
+                      setCurrentUser(null);
+                      setIsLoggedIn(false);
+                      setBookings([]);
+                      setActiveTab("packages");
+                    }}
+                  >
+                    Logout
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex items-center space-x-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => (window.location.href = "/login")}
+                  >
+                    Login
+                  </Button>
+                  <Button
+                    size="sm"
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                    onClick={() => (window.location.href = "/packages")}
+                  >
+                    Browse Packages
+                  </Button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </header>
@@ -287,13 +528,17 @@ export default function App() {
           onValueChange={setActiveTab}
           className="space-y-6"
         >
-          <TabsList className="grid w-full grid-cols-3 lg:w-auto lg:inline-grid">
+          <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
             <TabsTrigger
               value="packages"
               className="flex items-center space-x-2"
             >
               <Package className="h-4 w-4" />
               <span>Packages</span>
+            </TabsTrigger>
+            <TabsTrigger value="map" className="flex items-center space-x-2">
+              <MapPin className="h-4 w-4" />
+              <span>Map</span>
             </TabsTrigger>
             <TabsTrigger
               value="bookings"
@@ -311,6 +556,117 @@ export default function App() {
             </TabsTrigger>
           </TabsList>
 
+          {/* Map Tab */}
+          <TabsContent value="map" className="space-y-6">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                Explore Destinations on Map
+              </h2>
+              <p className="text-gray-600">
+                Click on markers to view package details and book your adventure
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[600px]">
+              {/* Map Section */}
+              <div className="h-full">
+                <InteractiveMap
+                  packages={packages}
+                  onDestinationSelect={(pkg) => {
+                    setSelectedPackage(pkg);
+                  }}
+                  selectedDestination={selectedPackage}
+                />
+              </div>
+
+              {/* Package Details Section */}
+              <div className="h-full overflow-y-auto">
+                {selectedPackage ? (
+                  <div className="bg-white rounded-2xl shadow-xl overflow-hidden border h-full">
+                    <div className="relative h-48">
+                      <img
+                        src={
+                          selectedPackage.image ||
+                          `https://images.unsplash.com/photo-${
+                            selectedPackage.id === 1
+                              ? "1512343879784-a960bf40e7f2"
+                              : selectedPackage.id === 2
+                              ? "1599661046827-dacde6976549"
+                              : selectedPackage.id === 3
+                              ? "1506905925346-21bda4d32df4"
+                              : selectedPackage.id === 4
+                              ? "1602216056096-3b40cc0c9944"
+                              : selectedPackage.id === 5
+                              ? "1564507592333-c60657eea523"
+                              : "1512453979798-5ea266f8880c"
+                          }?w=600&h=300&fit=crop`
+                        }
+                        alt={selectedPackage.name}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute top-4 right-4 bg-white bg-opacity-90 px-3 py-1 rounded-full">
+                        <span className="text-sm font-semibold text-gray-800">
+                          ⭐ {selectedPackage.rating || "4.5"}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="p-6">
+                      <h3 className="text-2xl font-bold mb-2">
+                        {selectedPackage.name}
+                      </h3>
+                      <p className="text-gray-600 mb-4">
+                        {selectedPackage.description}
+                      </p>
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-4">
+                          <span className="text-3xl font-bold text-green-600">
+                            ₹{parseFloat(selectedPackage.price).toLocaleString()}
+                          </span>
+                          <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                            {selectedPackage.duration} days
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex gap-3">
+                        <Button
+                          onClick={() => {
+                            if (!isLoggedIn) {
+                              window.location.href = '/login';
+                            } else {
+                              window.location.href = `/booking/new?packageId=${selectedPackage.id}`;
+                            }
+                          }}
+                          className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                        >
+                          {isLoggedIn ? "Book Now" : "Login to Book"}
+                        </Button>
+                        <Button
+                          variant="outline"
+                          onClick={() => setSelectedPackage(null)}
+                          className="px-6"
+                        >
+                          Close
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="bg-gray-50 rounded-2xl border-2 border-dashed border-gray-300 h-full flex items-center justify-center">
+                    <div className="text-center">
+                      <MapPin className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                      <h3 className="text-xl font-semibold text-gray-700 mb-2">
+                        Select a Destination
+                      </h3>
+                      <p className="text-gray-600">
+                        Click on any marker on the map to view package details
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </TabsContent>
+
           {/* Packages Tab */}
           <TabsContent value="packages" className="space-y-6">
             <div className="text-center mb-8">
@@ -325,77 +681,108 @@ export default function App() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {packages.map((pkg) => (
                 <Card
-                  key={pkg.PackageID}
-                  className="overflow-hidden hover:shadow-lg transition-shadow"
+                  key={pkg.id}
+                  className="overflow-hidden hover:shadow-lg transition-shadow duration-300"
                 >
-                  <div className="h-48 bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
-                    <MapPin className="h-16 w-16 text-white opacity-50" />
+                  <div className="h-48 relative overflow-hidden bg-gradient-to-br from-blue-400 to-purple-500">
+                    <img
+                      src={
+                        pkg.image ||
+                        `https://images.unsplash.com/photo-${
+                          pkg.id === 1
+                            ? "1512343879784-a960bf40e7f2"
+                            : pkg.id === 2
+                            ? "1599661046827-dacde6976549"
+                            : pkg.id === 3
+                            ? "1506905925346-21bda4d32df4"
+                            : pkg.id === 4
+                            ? "1602216056096-3b40cc0c9944"
+                            : pkg.id === 5
+                            ? "1564507592333-c60657eea523"
+                            : "1512453979798-5ea266f8880c"
+                        }?w=400&h=300&fit=crop`
+                      }
+                      alt={pkg.name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.target.src = `https://via.placeholder.com/400x300/3B82F6/FFFFFF?text=${encodeURIComponent(
+                          pkg.name.split(" ")[0]
+                        )}`;
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-black bg-opacity-20"></div>
+                    <div className="absolute top-3 right-3 bg-white bg-opacity-90 px-2 py-1 rounded-full text-xs font-semibold text-gray-800">
+                      ⭐ {pkg.rating || "4.5"}
+                    </div>
                   </div>
                   <CardHeader>
                     <CardTitle className="flex items-center justify-between">
-                      <span className="line-clamp-1">{pkg.Title}</span>
-                      <Badge variant="secondary">{pkg.Duration} days</Badge>
+                      <span className="line-clamp-1">{pkg.name}</span>
+                      <Badge variant="secondary">{pkg.duration} days</Badge>
                     </CardTitle>
                     <CardDescription className="line-clamp-2">
-                      {pkg.Description || "Explore amazing destinations"}
+                      {pkg.description || "Explore amazing destinations"}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                    {pkg.destinations && pkg.destinations.length > 0 && (
-                      <div className="flex items-start space-x-2">
-                        <MapPin className="h-4 w-4 text-gray-500 mt-1 flex-shrink-0" />
-                        <div className="flex-1">
-                          <p className="text-sm font-medium text-gray-700">
-                            Destinations:
-                          </p>
-                          <div className="flex flex-wrap gap-1 mt-1">
-                            {pkg.destinations.slice(0, 3).map((dest) => (
+                    <div className="flex items-start space-x-2">
+                      <MapPin className="h-4 w-4 text-gray-500 mt-1 flex-shrink-0" />
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-700">
+                          Destinations:
+                        </p>
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {pkg.destinations && pkg.destinations.length > 0 ? (
+                            pkg.destinations.map((dest) => (
                               <Badge
-                                key={dest.DestinationID}
+                                key={dest.id}
                                 variant="outline"
                                 className="text-xs"
                               >
-                                {dest.City}
+                                {dest.name}
                               </Badge>
-                            ))}
-                            {pkg.destinations.length > 3 && (
-                              <Badge variant="outline" className="text-xs">
-                                +{pkg.destinations.length - 3}
-                              </Badge>
-                            )}
-                          </div>
+                            ))
+                          ) : (
+                            <Badge variant="outline" className="text-xs">
+                              Multiple Destinations
+                            </Badge>
+                          )}
                         </div>
                       </div>
-                    )}
-                    {pkg.transports && pkg.transports.length > 0 && (
-                      <div className="flex items-center space-x-2">
-                        <Bus className="h-4 w-4 text-gray-500" />
-                        <span className="text-sm text-gray-600">
-                          {pkg.transports.map((t) => t.Type).join(", ")}
-                        </span>
-                      </div>
-                    )}
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Star className="h-4 w-4 text-yellow-500" />
+                      <span className="text-sm text-gray-600">
+                        Rating: {pkg.rating || "N/A"}
+                      </span>
+                    </div>
                     <div className="flex items-center space-x-2">
                       <Calendar className="h-4 w-4 text-gray-500" />
                       <span className="text-sm text-gray-600">
-                        {formatDate(pkg.StartDate)} - {formatDate(pkg.EndDate)}
+                        {pkg.duration} days
                       </span>
                     </div>
                     <div className="flex items-center justify-between pt-2 border-t">
                       <div className="flex items-center space-x-2">
                         <DollarSign className="h-5 w-5 text-green-600" />
                         <span className="text-2xl font-bold text-gray-900">
-                          ${pkg.Price}
+                          ₹{parseFloat(pkg.price || 0).toLocaleString()}
                         </span>
                       </div>
                     </div>
                   </CardContent>
                   <CardFooter>
                     <Button
-                      onClick={() => handleBookingStart(pkg)}
+                      onClick={() => {
+                        if (!isLoggedIn) {
+                          window.location.href = '/login';
+                        } else {
+                          window.location.href = `/booking/new?packageId=${pkg.id}`;
+                        }
+                      }}
                       className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                     >
-                      Book Now
+                      {isLoggedIn ? "Book Now" : "Login to Book"}
                     </Button>
                   </CardFooter>
                 </Card>
@@ -414,19 +801,30 @@ export default function App() {
 
           {/* Bookings Tab */}
           <TabsContent value="bookings" className="space-y-6">
-            {!currentUser ? (
-              <Card className="text-center py-12">
+            {!isLoggedIn ? (
+              <Card className="text-center py-12 bg-gray-50 rounded-lg">
                 <CardContent>
-                  <Calendar className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                  <Users className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-gray-700 mb-2">
+                    Login Required
+                  </h3>
                   <p className="text-gray-600 mb-4">
-                    Please make a booking to view your trips
+                    Please login to view your bookings and manage your trips
                   </p>
-                  <Button
-                    onClick={() => setActiveTab("packages")}
-                    className="bg-blue-600 hover:bg-blue-700"
-                  >
-                    Browse Packages
-                  </Button>
+                  <div className="flex justify-center space-x-3">
+                    <Button
+                      onClick={() => (window.location.href = "/login")}
+                      className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                    >
+                      Login
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => setActiveTab("packages")}
+                    >
+                      Browse Packages
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
             ) : (
@@ -435,15 +833,16 @@ export default function App() {
                   My Bookings
                 </h2>
                 {bookings.length === 0 ? (
-                  <Card className="text-center py-12">
+                  <Card className="text-center py-12 bg-gray-50 rounded-lg">
                     <CardContent>
-                      <Calendar className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                      <Package className="h-16 w-16 text-gray-300 mx-auto mb-4" />
                       <p className="text-gray-600 mb-4">
-                        You haven't made any bookings yet
+                        You haven't made any bookings yet. Browse our packages
+                        and start your adventure!
                       </p>
                       <Button
                         onClick={() => setActiveTab("packages")}
-                        className="bg-blue-600 hover:bg-blue-700"
+                        className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                       >
                         Browse Packages
                       </Button>
@@ -454,34 +853,40 @@ export default function App() {
                     {bookings.map((booking) => (
                       <Card
                         key={booking.BookingID}
-                        className="hover:shadow-md transition-shadow"
+                        className="border-l-4 border-blue-500 hover:shadow-md transition-shadow"
                       >
                         <CardHeader>
                           <div className="flex items-start justify-between">
                             <div>
-                              <CardTitle>{booking.PackageTitle}</CardTitle>
+                              <CardTitle className="flex items-center">
+                                <span>{booking.PackageTitle}</span>
+                                <Badge
+                                  className="ml-3"
+                                  variant={
+                                    booking.Status === "Confirmed"
+                                      ? "default"
+                                      : "secondary"
+                                  }
+                                >
+                                  {booking.Status}
+                                </Badge>
+                              </CardTitle>
                               <CardDescription>
                                 Booking ID: {booking.BookingID}
                               </CardDescription>
                             </div>
-                            <Badge
-                              variant={
-                                booking.Status === "Confirmed"
-                                  ? "default"
-                                  : booking.Status === "Pending"
-                                  ? "secondary"
-                                  : "destructive"
-                              }
-                            >
-                              {booking.Status}
-                            </Badge>
+                            <div className="text-right">
+                              <span className="text-lg font-bold text-green-600">
+                                ₹{booking.TotalAmount?.toLocaleString()}
+                              </span>
+                            </div>
                           </div>
                         </CardHeader>
                         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div className="space-y-2">
                             <div className="flex items-center space-x-2">
-                              <Hotel className="h-4 w-4 text-gray-500" />
-                              <span className="text-sm">
+                              <Hotel className="h-4 w-4 text-blue-500" />
+                              <span className="text-sm font-medium">
                                 {booking.HotelName}, {booking.HotelCity}
                               </span>
                             </div>
@@ -494,7 +899,7 @@ export default function App() {
                           </div>
                           <div className="space-y-2">
                             <div className="flex items-center space-x-2">
-                              <Calendar className="h-4 w-4 text-gray-500" />
+                              <Calendar className="h-4 w-4 text-blue-500" />
                               <span className="text-sm">
                                 Booked: {formatDate(booking.BookingDate)}
                               </span>
@@ -502,7 +907,7 @@ export default function App() {
                             <div className="flex items-center space-x-2">
                               <DollarSign className="h-4 w-4 text-green-600" />
                               <span className="text-sm font-semibold">
-                                ${booking.TotalAmount}
+                                ₹{booking.TotalAmount?.toLocaleString()}
                               </span>
                             </div>
                           </div>
@@ -532,6 +937,16 @@ export default function App() {
                               ))}
                             </div>
                           )}
+                          <div className="col-span-full mt-4 pt-2 border-t">
+                            <Button
+                              onClick={() => window.location.href = `/booking/${booking.BookingID}`}
+                              variant="outline"
+                              size="sm"
+                              className="w-full"
+                            >
+                              View Details
+                            </Button>
+                          </div>
                         </CardContent>
                       </Card>
                     ))}
@@ -547,59 +962,73 @@ export default function App() {
               Travel Analytics
             </h2>
 
-            {analytics && (
+            {analytics ? (
               <div className="space-y-6">
                 {/* Stats Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <Card>
+                  <Card className="hover:shadow-md transition-shadow">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-sm font-medium text-gray-600">
+                      <CardTitle className="text-sm font-medium text-gray-600 flex items-center">
+                        <Users className="h-4 w-4 mr-2 text-blue-500" />
                         Total Bookings
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold">
+                      <div className="text-2xl font-bold text-blue-600">
                         {analytics.stats?.TotalBookings || 0}
                       </div>
+                      <p className="text-xs text-gray-500 mt-1">
+                        All time bookings
+                      </p>
                     </CardContent>
                   </Card>
-                  <Card>
+                  <Card className="hover:shadow-md transition-shadow">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-sm font-medium text-gray-600">
+                      <CardTitle className="text-sm font-medium text-gray-600 flex items-center">
+                        <DollarSign className="h-4 w-4 mr-2 text-green-500" />
                         Total Revenue
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="text-2xl font-bold text-green-600">
-                        ${analytics.stats?.TotalRevenue || 0}
+                        ₹{(analytics.stats?.TotalRevenue || 0).toLocaleString()}
                       </div>
+                      <p className="text-xs text-gray-500 mt-1">
+                        All time revenue
+                      </p>
                     </CardContent>
                   </Card>
-                  <Card>
+                  <Card className="hover:shadow-md transition-shadow">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-sm font-medium text-gray-600">
+                      <CardTitle className="text-sm font-medium text-gray-600 flex items-center">
+                        <TrendingUp className="h-4 w-4 mr-2 text-purple-500" />
                         Avg Booking Value
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold">
-                        $
+                      <div className="text-2xl font-bold text-purple-600">
+                        ₹
                         {Number(
                           analytics.stats?.AverageBookingValue ?? 0
-                        ).toFixed(2)}
+                        ).toLocaleString()}
                       </div>
+                      <p className="text-xs text-gray-500 mt-1">Per booking</p>
                     </CardContent>
                   </Card>
-                  <Card>
+                  <Card className="hover:shadow-md transition-shadow">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-sm font-medium text-gray-600">
+                      <CardTitle className="text-sm font-medium text-gray-600 flex items-center">
+                        <Users className="h-4 w-4 mr-2 text-orange-500" />
                         Total Users
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold text-blue-600">
+                      <div className="text-2xl font-bold text-orange-600">
                         {analytics.stats?.TotalUsers || 0}
                       </div>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Registered users
+                      </p>
                     </CardContent>
                   </Card>
                 </div>
@@ -607,7 +1036,10 @@ export default function App() {
                 {/* Popular Packages */}
                 <Card>
                   <CardHeader>
-                    <CardTitle>Most Popular Packages</CardTitle>
+                    <CardTitle className="flex items-center">
+                      <Package className="h-5 w-5 mr-2 text-blue-600" />
+                      Most Popular Packages
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
@@ -616,7 +1048,7 @@ export default function App() {
                         .map((pkg, index) => (
                           <div
                             key={index}
-                            className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                            className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                           >
                             <div className="flex-1">
                               <p className="font-medium text-gray-900">
@@ -628,7 +1060,7 @@ export default function App() {
                             </div>
                             <div className="text-right">
                               <p className="font-semibold text-green-600">
-                                ${pkg.TotalRevenue || 0}
+                                ₹{(pkg.TotalRevenue || 0).toLocaleString()}
                               </p>
                               <p className="text-xs text-gray-500">revenue</p>
                             </div>
@@ -641,7 +1073,10 @@ export default function App() {
                 {/* Top Destinations */}
                 <Card>
                   <CardHeader>
-                    <CardTitle>Top Destinations</CardTitle>
+                    <CardTitle className="flex items-center">
+                      <MapPin className="h-5 w-5 mr-2 text-purple-600" />
+                      Top Destinations
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -650,7 +1085,7 @@ export default function App() {
                         .map((dest, index) => (
                           <div
                             key={index}
-                            className="flex items-center space-x-3 p-3 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg"
+                            className="flex items-center space-x-3 p-3 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg hover:from-blue-100 hover:to-purple-100 transition-colors"
                           >
                             <div className="bg-blue-600 p-2 rounded-lg">
                               <MapPin className="h-4 w-4 text-white" />
@@ -675,7 +1110,10 @@ export default function App() {
                 {/* Hotel Performance */}
                 <Card>
                   <CardHeader>
-                    <CardTitle>Hotel Performance</CardTitle>
+                    <CardTitle className="flex items-center">
+                      <Hotel className="h-5 w-5 mr-2 text-green-600" />
+                      Hotel Performance
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
@@ -684,7 +1122,7 @@ export default function App() {
                         .map((hotel, index) => (
                           <div
                             key={index}
-                            className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                            className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                           >
                             <div className="flex-1">
                               <p className="font-medium text-gray-900">
@@ -700,7 +1138,8 @@ export default function App() {
                                   {hotel.TotalBookings || 0} bookings
                                 </p>
                                 <p className="text-xs text-gray-500">
-                                  ${hotel.TotalRevenue || 0} revenue
+                                  ₹{(hotel.TotalRevenue || 0).toLocaleString()}{" "}
+                                  revenue
                                 </p>
                               </div>
                               <div className="flex items-center space-x-1">
@@ -717,6 +1156,17 @@ export default function App() {
                     </div>
                   </CardContent>
                 </Card>
+              </div>
+            ) : (
+              <div className="text-center py-12 bg-gray-50 rounded-lg">
+                <TrendingUp className="h-12 w-12 mx-auto text-gray-300 mb-3" />
+                <h3 className="text-xl font-medium">
+                  Analytics data not available
+                </h3>
+                <p className="text-gray-500 mt-2 max-w-md mx-auto">
+                  Please check back later for analytics information or contact
+                  support if this persists.
+                </p>
               </div>
             )}
           </TabsContent>
@@ -737,7 +1187,7 @@ export default function App() {
             </DialogDescription>
           </DialogHeader>
 
-          {bookingStep === 1 ? (
+          {bookingStep === 1 && !isLoggedIn ? (
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -831,14 +1281,17 @@ export default function App() {
                 <CardContent className="pt-4">
                   <div className="space-y-2">
                     <p className="font-semibold text-lg">
-                      {selectedPackage?.Title}
+                      {selectedPackage?.name}
                     </p>
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-gray-600">
-                        Duration: {selectedPackage?.Duration} days
+                        Duration: {selectedPackage?.duration} days
                       </span>
                       <span className="text-xl font-bold text-green-600">
-                        ${selectedPackage?.Price}
+                        ₹
+                        {parseFloat(
+                          selectedPackage?.price || 0
+                        ).toLocaleString()}
                       </span>
                     </div>
                   </div>
@@ -857,12 +1310,9 @@ export default function App() {
                     <SelectValue placeholder="Choose a hotel" />
                   </SelectTrigger>
                   <SelectContent>
-                    {hotels.map((hotel) => (
-                      <SelectItem
-                        key={hotel.HotelID}
-                        value={hotel.HotelID.toString()}
-                      >
-                        {hotel.HotelName} - {hotel.City} ({hotel.Rating}★)
+                    {hotels && hotels.map((hotel) => (
+                      <SelectItem key={hotel.id} value={hotel.id.toString()}>
+                        {hotel.name} - {hotel.address} ({hotel.star_rating}★)
                       </SelectItem>
                     ))}
                   </SelectContent>
