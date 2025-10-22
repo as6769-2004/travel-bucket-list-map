@@ -8,7 +8,7 @@ export async function GET(request, { params }) {
     
     // Get booking from database
     const bookingQuery = `
-      SELECT b.*, tp.name as package_name, tp.price as package_price, tp.duration,
+      SELECT b.*, tp.name as package_name, tp.price as package_price, tp.duration, tp.destination_id,
              d.name as destination_name, d.country,
              h.name as hotel_name, h.price_per_night as hotel_price,
              t.type as transport_type, t.provider as transport_provider, t.price as transport_price
@@ -56,6 +56,7 @@ export async function GET(request, { params }) {
     return_date: "2024-02-20",
     num_travelers: 2,
     total_price: 25000,
+    destination_id: 1,
     destination_name: "Goa",
     country: "India",
     special_requests: "Sea view room preferred",
