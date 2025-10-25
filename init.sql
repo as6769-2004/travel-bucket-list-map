@@ -232,7 +232,7 @@ INSERT INTO Destination (name, country, description, image_url, latitude, longit
 -- Trip Packages (20 Records)
 INSERT INTO TripPackage (destination_id, name, description, price, duration, max_travelers, image_url, includes_flight, includes_hotel, includes_meals, includes_activities, rating, is_featured) VALUES
 (1, 'Goa Beach Escape', 'Experience the sun, sand, and vibrant nightlife of Goa beaches.', 35999.00, 5, 10, '/images/packages/goa_beaches.jpg', TRUE, TRUE, TRUE, TRUE, 4.7, TRUE),
-(2, 'Royal Rajasthan', 'Explore the majestic forts, palaces, and rich culture of Jaipur and Rajasthan.', 42999.00, 7, 8, '/images/packages/royal_rajasthan.jpg', TRUE, TRUE, TRUE, FALSE, 4.8, TRUE),
+(2, 'Royal Rajasthan', 'Explore majestic forts, palaces, and rich culture of Jaipur and Rajasthan.', 42999.00, 7, 8, '/images/packages/royal_rajasthan.jpg', TRUE, TRUE, TRUE, FALSE, 4.8, TRUE),
 (3, 'Kerala Backwaters', 'Cruise through serene backwaters and experience Ayurvedic wellness in God\'s Own Country.', 38999.00, 6, 8, '/images/packages/kerala_backwaters.jpg', TRUE, TRUE, TRUE, TRUE, 4.6, FALSE),
 (4, 'Spiritual Varanasi', 'Witness the ancient rituals and spiritual essence of India\'s oldest living city.', 29999.00, 4, 6, '/images/packages/varanasi_ghats.jpg', TRUE, TRUE, FALSE, TRUE, 4.5, TRUE),
 (5, 'Taj Mahal & Golden Triangle', 'Discover the iconic Taj Mahal and the cultural heritage of Delhi, Agra, and Jaipur.', 45999.00, 6, 12, '/images/packages/golden_triangle.jpg', TRUE, TRUE, TRUE, TRUE, 4.7, TRUE),
