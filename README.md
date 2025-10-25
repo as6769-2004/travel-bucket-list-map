@@ -77,7 +77,7 @@ lib/
 - `POST /api/users/login` - Login with role detection 
 
 ### Core APIs
-- `GET /api/packages` - List travel packages
+- `GET /api/packages` - List travel package
 - `GET /api/hotels` - List hotels
 - `POST /api/bookings` - Create booking
 - `POST /api/payments` - Process payment
