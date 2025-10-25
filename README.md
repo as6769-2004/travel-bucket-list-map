@@ -80,7 +80,7 @@ lib/
 - `GET /api/packages` - List travel package
 - `GET /api/hotels` - List hotels
 - `POST /api/bookings` - Create booking
-- `POST /api/payments` - Process payment
+- `POST /api/payments` - Process payments 
 - `GET /api/admin/analytics` - Admin dashboard data
 
 ## 🎨 Tech Stack
