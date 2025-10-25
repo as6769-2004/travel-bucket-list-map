@@ -3,8 +3,8 @@
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18+
-- MySQL 8.0+
+- Node.js 18+ 
+- MySQL 8.0+ 
 
 ### Setup
 ```bash
