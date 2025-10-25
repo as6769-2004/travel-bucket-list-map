@@ -81,7 +81,7 @@ lib/
 - `GET /api/hotels` - List hotels
 - `POST /api/bookings` - Create booking
 - `POST /api/payments` - Process payments 
-- `GET /api/admin/analytics` - Admin dashboard data
+- `GET /api/admin/analytics` - Admin dashboard datas
 
 ## 🎨 Tech Stack
 
