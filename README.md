@@ -74,7 +74,7 @@ lib/
 
 ### Authentication
 - `POST /api/users/register` - User registration
-- `POST /api/users/login` - Login with role detection
+- `POST /api/users/login` - Login with role detection 
 
 ### Core APIs
 - `GET /api/packages` - List travel packages
