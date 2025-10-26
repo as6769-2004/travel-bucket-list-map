@@ -16,7 +16,7 @@ export default function ForgotPassword() {
 
     // Simulate password reset functionality
     setTimeout(() => {
-      setMessage('Password reset instructions have been sent to your email address.');
+      setMessage('Password reset instructions will sent to your email address.');
       setLoading(false);
     }, 2000);
   };
