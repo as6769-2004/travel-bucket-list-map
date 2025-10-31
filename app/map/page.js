@@ -16,7 +16,6 @@ export default function MapPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    // Check if user is logged in
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
       setIsLoggedIn(true);
@@ -142,7 +141,7 @@ export default function MapPage() {
             <div className="flex items-center space-x-3">
               <Button
                 variant="ghost"
-                onClick={() => router.push('/')}
+                onClick={() => router.push("/")}
                 className="mr-2"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
@@ -178,7 +177,6 @@ export default function MapPage() {
             />
           </div>
 
-          {/* Package Details Section */}
           <div className="h-full overflow-y-auto">
             {selectedPackage ? (
               <Card className="h-full">
@@ -215,9 +213,7 @@ export default function MapPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <p className="text-gray-600">
-                    {selectedPackage.description}
-                  </p>
+                  <p className="text-gray-600">{selectedPackage.description}</p>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <span className="text-2xl font-bold text-green-600">
@@ -232,7 +228,7 @@ export default function MapPage() {
                     <Button
                       onClick={() => {
                         if (!isLoggedIn) {
-                          window.location.href = '/login';
+                          window.location.href = "/login";
                         } else {
                           window.location.href = `/booking/new?packageId=${selectedPackage.id}`;
                         }
