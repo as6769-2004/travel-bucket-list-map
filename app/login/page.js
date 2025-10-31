@@ -33,7 +33,6 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (data.success) {
-        // Store user data with ID in localStorage
         const userData = {
           ...data.user,
           userId: data.user.id
