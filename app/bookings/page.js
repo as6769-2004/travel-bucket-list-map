@@ -58,7 +58,7 @@ export default function BookingsPage() {
             total_price: 25000,
             destination_name: "Goa",
             country: "India",
-            special_requests: "Sea view room preferred"
+            special_requests: "Sea views room preferred"
           },
           {
             id: 2,
