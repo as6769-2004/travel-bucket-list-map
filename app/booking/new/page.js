@@ -61,7 +61,6 @@ function BookingContent() {
       const response = await fetch(`/api/packages?id=${packageId}`);
       const data = await response.json();
       if (data.packages && data.packages.length > 0) {
-        // Find the specific package by ID
         const pkg = data.packages.find(p => p.id.toString() === packageId.toString());
         if (pkg) {
           const packageData = {
