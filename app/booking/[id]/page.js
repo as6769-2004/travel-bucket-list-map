@@ -56,6 +56,7 @@ export default function BookingDetails() {
         if (hotelsData.success) {
           console.log('Hotels loaded:', hotelsData.hotels || hotelsData.data);
           let availableHotels = hotelsData.hotels || hotelsData.data || [];
+
           
           // Ensure current hotel is included if not in destination-specific list
           if (bookingData.booking.hotel_id && !availableHotels.find(h => h.id.toString() === bookingData.booking.hotel_id.toString())) {
