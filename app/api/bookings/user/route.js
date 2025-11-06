@@ -15,7 +15,6 @@ export async function GET(request) {
       );
     }
     
-    // Build the SQL query for user-specific bookings
     const sql = `
       SELECT 
         b.id AS BookingID,
@@ -47,7 +46,6 @@ export async function GET(request) {
       ORDER BY b.created_at DESC
     `;
     
-    // Execute the query
     const bookings = await query(sql, [userId]);
     
     return NextResponse.json({
