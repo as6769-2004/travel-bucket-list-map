@@ -224,7 +224,7 @@ INSERT INTO Destination (name, country, description, image_url, latitude, longit
 ('Pushkar', 'India', 'Holy city in Rajasthan famous for Brahma Temple and camel fair.', 'https://picsum.photos/seed/pushkar/800/600', 26.4899, 74.5511, 78),
 ('Coorg', 'India', 'Coffee plantation region in Karnataka with misty hills and waterfalls.', 'https://picsum.photos/seed/coorg/800/600', 12.3375, 75.8069, 79),
 ('Mount Abu', 'India', 'Only hill station in Rajasthan with Dilwara Jain temples and cool climate.', 'https://picsum.photos/seed/mountabu/800/600', 24.5925, 72.7156, 77),
-('Ooty', 'India', 'Queen of hill stations in Tamil Nadu with tea gardens and toy train.', 'https://picsum.photos/seed/ooty/800/600', 11.4064, 76.6932, 82),
+('Ooty', 'India', 'Queen of hill station in Tamil Nadu with tea gardens and toy train.', 'https://picsum.photos/seed/ooty/800/600', 11.4064, 76.6932, 82),
 ('Munnar', 'India', 'Hill station of Kerala famous for tea plantations and scenic beauty.', 'https://picsum.photos/seed/munnar/800/600', 10.0889, 77.0595, 85);
 
 ---
