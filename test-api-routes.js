@@ -10,7 +10,7 @@ const testRoutes = async () => {
   ];
 
   
-  console.log('🧪 Testing API Routes...\n');
+  console.log('🧪 Testing API Routes\n');
 
   for (const route of routes) {
     try {
